@@ -1,22 +1,28 @@
-import { useState } from 'react';
-import Navbar from '../components/navbar';
-import Footer from '../components/Footer';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom'
 import ProductReviews from '../components/ProductReviews';
 
 const ProductDetailsPage = (props) => {
-  const { product, onNavigate, onAddToCart, cartItemCount, relatedProducts } = props;
+  const { products, onAddToCart } = props;
+  const { id } = useParams();
+  const product = products.find(p => p.id === parseInt(id));
+  const relatedProducts = products.filter(p => p.id !== parseInt(id));
   const [quantity, setQuantity] = useState(1);
-  const [selectedImage, setSelectedImage] = useState(product?.image || '');
+  // const [selectedImage, setSelectedImage] = useState(product?.image || '');
+  const navigate = useNavigate();
+
+  // Reset state when product changes
+  useEffect(() => {
+    setQuantity(1);
+  }, [product]);
+
+
 
   if (!product) {
     return (
-      <div>
-        <Navbar onNavigate={onNavigate} cartItemCount={cartItemCount} />
-        <div className="product-details-error">
-          <h2>Product not found</h2>
-          <button onClick={() => onNavigate('home')}>Back to Home</button>
-        </div>
-        <Footer />
+      <div className="product-details-error">
+        <h2>Product not found</h2>
+        <button onClick={() => navigate('/')}>Back to Home</button>
       </div>
     );
   }
@@ -60,11 +66,9 @@ const ProductDetailsPage = (props) => {
 
   return (
     <div>
-      <Navbar onNavigate={onNavigate} cartItemCount={cartItemCount} />
-
       <div className="product-details-container">
         <div className="breadcrumb">
-          <button onClick={() => onNavigate('home')}>Home</button>
+          <button onClick={() => navigate('/')}>Home</button>
           <span> / </span>
           <span>{product.title}</span>
         </div>
@@ -72,15 +76,7 @@ const ProductDetailsPage = (props) => {
         <div className="product-details-main">
           <div className="product-images">
             <div className="main-image">
-              <img src={selectedImage || product.image} alt={product.title} />
-            </div>
-            <div className="thumbnail-gallery">
-              <img
-                src={product.image}
-                alt={product.title}
-                onClick={() => setSelectedImage(product.image)}
-                className={selectedImage === product.image ? 'active' : ''}
-              />
+              <img src={product.image} alt={product.title} />
             </div>
           </div>
 
@@ -132,7 +128,7 @@ const ProductDetailsPage = (props) => {
                   <img src={relProduct.image} alt={relProduct.title} />
                   <h3>{relProduct.title}</h3>
                   <p>PKR {relProduct.price}</p>
-                  <button onClick={() => onNavigate('product-details', relProduct)}>
+                  <button onClick={() => navigate("/productDetails/"+relProduct.id)}>
                     View Details
                   </button>
                 </div>
@@ -141,8 +137,6 @@ const ProductDetailsPage = (props) => {
           </div>
         )}
       </div>
-
-      <Footer />
     </div>
   );
 };

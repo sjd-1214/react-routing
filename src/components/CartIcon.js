@@ -1,8 +1,11 @@
+import { useNavigate } from "react-router-dom";
+
 const CartIcon = (props) => {
-  const { itemCount, onClick } = props;
+  const { itemCount} = props;
+  const navigate = useNavigate();
 
   return (
-    <button className="cart-icon" onClick={onClick} aria-label="Shopping Cart">
+    <button className="cart-icon" onClick={()=> navigate('/cart')} aria-label="Shopping Cart">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <circle cx="9" cy="21" r="1"></circle>
         <circle cx="20" cy="21" r="1"></circle>

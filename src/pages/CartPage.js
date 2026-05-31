@@ -1,8 +1,8 @@
-import Navbar from '../components/navbar';
-import Footer from '../components/Footer';
+import { useNavigate } from 'react-router-dom'
 
 const CartPage = (props) => {
-  const { cartItems, onNavigate, onUpdateQuantity, onRemoveItem, cartItemCount } = props;
+  const { cartItems, updateQuantity, removeFromCart } = props;
+  const navigate = useNavigate();
 
   const calculateSubtotal = () => {
     return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -19,26 +19,20 @@ const CartPage = (props) => {
     return calculateSubtotal() - calculateDiscount();
   };
 
-  if (cartItems.length === 0) {
+  if (!cartItems || cartItems.length === 0) {
     return (
-      <div>
-        <Navbar onNavigate={onNavigate} cartItemCount={cartItemCount} />
-        <div className="empty-cart">
-          <h2>Your Cart is Empty</h2>
-          <p>Looks like you haven't added anything to your cart yet.</p>
-          <button onClick={() => onNavigate('home')} className="continue-shopping-btn">
-            Start Shopping
-          </button>
-        </div>
-        <Footer />
+      <div className="empty-cart">
+        <h2>Your Cart is Empty</h2>
+        <p>Looks like you haven't added anything to your cart yet.</p>
+        <button onClick={()=>navigate('/')} className="continue-shopping-btn">
+          Start Shopping
+        </button>
       </div>
     );
   }
 
   return (
     <div>
-      <Navbar onNavigate={onNavigate} cartItemCount={cartItemCount} />
-
       <div className="cart-container">
         <h1>Shopping Cart</h1>
 
@@ -57,11 +51,11 @@ const CartPage = (props) => {
                 </div>
 
                 <div className="cart-item-quantity">
-                  <button onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}>
+                  <button onClick={() => updateQuantity(item.id, item.quantity - 1)}>
                     -
                   </button>
                   <span>{item.quantity}</span>
-                  <button onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}>
+                  <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>
                     +
                   </button>
                 </div>
@@ -72,7 +66,7 @@ const CartPage = (props) => {
 
                 <button
                   className="cart-item-remove"
-                  onClick={() => onRemoveItem(item.id)}
+                  onClick={() => removeFromCart(item.id)}
                   aria-label="Remove item"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -106,22 +100,20 @@ const CartPage = (props) => {
 
             <button
               className="checkout-btn"
-              onClick={() => onNavigate('checkout')}
+              onClick={() => navigate('/checkout')}
             >
               Proceed to Checkout
             </button>
 
             <button
               className="continue-shopping-btn"
-              onClick={() => onNavigate('home')}
+              onClick={() => navigate('/')}
             >
               Continue Shopping
             </button>
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };

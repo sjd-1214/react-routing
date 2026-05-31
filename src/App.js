@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import { HomePage, ProductDetailsPage, CartPage, ContactPage, CheckoutPage } from './pages';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Navbar from './components/navbar';
+import Footer from './components/Footer';
 
 function App() {
 
@@ -22,12 +25,9 @@ function App() {
     { id: 15, title: 'Steampunk Gear Mask', image: 'https://placehold.co/400x400/CD7F32/000?text=Steampunk+Mask', price: 6200, discount: 18, category: 'Fantasy' }
   ];
 
+
   // Cart state management
   const [cartItems, setCartItems] = useState([]);
-
-  // Page navigation state (temporary for demo - will be replaced with React Router)
-  const [currentPage, setCurrentPage] = useState('home');
-  const [selectedProduct, setSelectedProduct] = useState(null);
 
   // Cart functions
   const addToCart = (product) => {
@@ -60,15 +60,6 @@ function App() {
     ));
   };
 
-  // Navigation function (temporary - will be replaced with React Router)
-  const handleNavigation = (page, data = null) => {
-    setCurrentPage(page);
-    if (data) {
-      setSelectedProduct(data);
-    }
-    window.scrollTo(0, 0);
-  };
-
   // Search and filter functions
   const handleSearch = (searchTerm) => {
     console.log('Search:', searchTerm);
@@ -86,59 +77,44 @@ function App() {
 
   const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
-  // Render different pages based on currentPage state
-  // NOTE: This is temporary demo logic. When implementing React Router:
-  // - Replace this conditional rendering with <Routes> and <Route> components
-  // - Replace handleNavigation with useNavigate() hook
-  // - Remove currentPage state
   return (
-    <div className="App">
-      {currentPage === 'home' && (
-        <HomePage
-          products={products}
-          onNavigate={handleNavigation}
-          onSearch={handleSearch}
-          onFilter={handleFilter}
-          cartItemCount={cartItemCount}
-          onAddToCart={addToCart}
-        />
-      )}
-
-      {currentPage === 'product-details' && (
-        <ProductDetailsPage
-          product={selectedProduct}
-          onNavigate={handleNavigation}
-          onAddToCart={addToCart}
-          cartItemCount={cartItemCount}
-          relatedProducts={products.filter(p => p.id !== selectedProduct?.id)}
-        />
-      )}
-
-      {currentPage === 'cart' && (
-        <CartPage
-          cartItems={cartItems}
-          onNavigate={handleNavigation}
-          onUpdateQuantity={updateQuantity}
-          onRemoveItem={removeFromCart}
-          cartItemCount={cartItemCount}
-        />
-      )}
-
-      {currentPage === 'contact' && (
-        <ContactPage
-          onNavigate={handleNavigation}
-          cartItemCount={cartItemCount}
-        />
-      )}
-
-      {currentPage === 'checkout' && (
-        <CheckoutPage
-          cartItems={cartItems}
-          onNavigate={handleNavigation}
-          cartItemCount={cartItemCount}
-        />
-      )}
-    </div>
+    <BrowserRouter>
+      <div className='App'>
+        <Navbar cartItemCount={cartItemCount} />
+        <Routes>
+          <Route path="/" element={
+            <HomePage
+              products={products}
+              onAddToCart={addToCart}
+              onSearch={handleSearch}
+              onFilter={handleFilter}
+            />
+          } />
+          <Route path="/productDetails/:id" element={
+            <ProductDetailsPage
+              products={products}
+              onAddToCart={addToCart}
+            />
+          } />
+          <Route path="/cart" element={
+            <CartPage
+              cartItems={cartItems}
+              updateQuantity={updateQuantity}
+              removeFromCart={removeFromCart}
+            />
+          } />
+          <Route path="/contact" element={
+            <ContactPage />
+          } />
+          <Route path="/checkout" element={
+            <CheckoutPage
+              cartItems={cartItems}
+            />
+          } />
+        </Routes>
+        <Footer />
+      </div>
+    </BrowserRouter>
   );
 }
 

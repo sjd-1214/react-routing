@@ -1,4 +1,8 @@
+import {useNavigate } from 'react-router-dom'
+
 const ProdCard = (props) => {
+
+    const navigate = useNavigate();
 
     return (
 
@@ -6,7 +10,7 @@ const ProdCard = (props) => {
             <img
                 src={props.data.image}
                 alt={props.data.title}
-                onClick={() => props.onNavigate && props.onNavigate('product-details', props.data)}
+                onClick={() => navigate("/productDetails/"+props.data.id)}
                 style={{ cursor: 'pointer' }}
             />
             <div className="prod-desc">

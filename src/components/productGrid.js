@@ -18,7 +18,6 @@ const ProdGrid = (props) => {
                         <ProdCard
                             data={prod}
                             key={prod.id}
-                            onNavigate={props.onNavigate}
                             onAddToCart={props.onAddToCart}
                         />
                     ))

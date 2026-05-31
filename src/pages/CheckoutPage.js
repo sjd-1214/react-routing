@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import Navbar from '../components/navbar';
-import Footer from '../components/Footer';
+import { useNavigate } from 'react-router-dom';
 
 const CheckoutPage = (props) => {
-  const { cartItems, onNavigate, cartItemCount } = props;
+  const { cartItems } = props;
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -38,29 +38,23 @@ const CheckoutPage = (props) => {
       total: calculateTotal()
     });
     alert('Order placed successfully! Thank you for shopping with us.');
-    onNavigate('home');
+    navigate('/');
   };
 
-  if (cartItems.length === 0) {
+  if (!cartItems || cartItems.length === 0) {
     return (
-      <div>
-        <Navbar onNavigate={onNavigate} cartItemCount={cartItemCount} />
-        <div className="empty-cart">
-          <h2>Your Cart is Empty</h2>
-          <p>Add items to your cart before checking out.</p>
-          <button onClick={() => onNavigate('home')} className="continue-shopping-btn">
-            Start Shopping
-          </button>
-        </div>
-        <Footer />
+      <div className="empty-cart">
+        <h2>Your Cart is Empty</h2>
+        <p>Add items to your cart before checking out.</p>
+        <button onClick={() => navigate('/')} className="continue-shopping-btn">
+          Start Shopping
+        </button>
       </div>
     );
   }
 
   return (
     <div>
-      <Navbar onNavigate={onNavigate} cartItemCount={cartItemCount} />
-
       <div className="checkout-container">
         <h1>Checkout</h1>
 
@@ -202,8 +196,6 @@ const CheckoutPage = (props) => {
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };

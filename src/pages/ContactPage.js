@@ -1,9 +1,6 @@
 import { useState } from 'react';
-import Navbar from '../components/navbar';
-import Footer from '../components/Footer';
 
-const ContactPage = (props) => {
-  const { onNavigate, cartItemCount } = props;
+const ContactPage = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -28,8 +25,6 @@ const ContactPage = (props) => {
 
   return (
     <div>
-      <Navbar onNavigate={onNavigate} cartItemCount={cartItemCount} />
-
       <div className="contact-container">
         <h1>Contact Us</h1>
         <p className="contact-subtitle">Have questions? We'd love to hear from you!</p>
@@ -138,8 +133,6 @@ const ContactPage = (props) => {
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };

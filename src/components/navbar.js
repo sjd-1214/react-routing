@@ -1,7 +1,8 @@
+import { Link } from 'react-router-dom';
 import CartIcon from './CartIcon';
 
 const Navbar = (props) => {
-    const { onNavigate, cartItemCount = 0 } = props;
+    const {cartItemCount = 0 } = props;
 
     function ThemeToggle(){
 
@@ -22,12 +23,12 @@ const Navbar = (props) => {
                 <img src='/assests/profile-icon-svg-download-png-1722755.webp' alt=""/>
             </div>
             <nav>
-                <a href="#home" onClick={() => onNavigate && onNavigate('home')}>Home</a>
-                <a href="#shop" onClick={() => onNavigate && onNavigate('home')}>Shop</a>
-                <a href="#contact" onClick={() => onNavigate && onNavigate('contact')}>Contact</a>
+                <Link to="/">Home</Link>
+                <Link to="/">Shop</Link>
+                <Link to="/contact">Contact</Link>
             </nav>
             <div className="nav-actions">
-                <CartIcon itemCount={cartItemCount} onClick={() => onNavigate && onNavigate('cart')} />
+                <CartIcon itemCount={cartItemCount} />
                 <div className="profile" id="theme-toggle" onClick={ThemeToggle}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
